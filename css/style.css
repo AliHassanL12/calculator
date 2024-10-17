@@ -19,15 +19,14 @@ body {
 }
 
 .container {
-    border: 1px solid red;
+    border: 2px solid rgb(205, 49, 49);
     width: 300px;
-    height: 400px;
+    height: 300px;
     display: flex;
     flex-direction: column;
 }
 
 .display {
-    border: 1px solid green;
     height: 60px;
 }
 
@@ -36,12 +35,12 @@ body {
     flex-grow: 1;
 }
 .numbers {
-    border: 1px solid blue;
+    display: flex;
+    flex-direction: column;
     flex-grow: 6;
 }
 
 .operators {
-    border: 1px solid yellow;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -49,4 +48,23 @@ body {
 
 .operators button {
     flex-grow: 1;
+}
+
+.numberSection,
+.numberSection button {
+    display: flex;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.numberSection button {
+    justify-content: center;
+    align-items: center;
+}
+
+.display {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 10px;
 }

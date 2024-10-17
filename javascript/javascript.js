@@ -41,3 +41,21 @@ function operate(operator, num1, num2) {
     }
 }
 
+const buttons = document.querySelectorAll('.num');
+let displayVal = 0;
+let firstNum, secondNum;
+
+function populateDisplay(event) {
+    const display = document.querySelector('.display');
+    const btnValue = event.target.textContent;
+    if (display.textContent == 0) display.textContent = btnValue;
+    else {
+        display.textContent += btnValue;
+        displayVal = display.textContent;
+    } 
+}
+
+const numberSection = document.querySelectorAll('.numberSection');
+numberSection.forEach((div) => {
+    div.addEventListener('click', populateDisplay)
+})

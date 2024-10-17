@@ -4,22 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css">
-    <script src="./javascript/javascript.js"></script>
+    <script src="./javascript/javascript.js" defer></script>
     <title>Calculator</title>
 </head>
 <body>
     <div class="container">
-        <div class="display"></div>
+        <div class="display">0</div>
         <div class="numOpContainer">
-            <div class="numbers"></div>
+            <div class="numbers">
+                <div class="numberSection">
+                    <button class="num">7</button>
+                    <button class="num">8</button>
+                    <button class="num">9</button>
+                </div>
+                <div class="numberSection">
+                    <button class="num">4</button>
+                    <button class="num">5</button>
+                    <button class="num">6</button>
+                </div>
+                <div class="numberSection">
+                    <button class="num">1</button>
+                    <button class="num">2</button>
+                    <button class="num">3</button>
+                </div>
+                <div class="numberSection">
+                    <button class="num">0</button>
+                </div>
+            </div>
             <div class="operators">
                 <button>CLEAR</button>
                 <button>+/-</button>
-                <button>+</button>
-                <button>-</button>
-                <button>/</button>
-                <button>*</button>
-                <button>=</button>
+                <button class="op">+</button>
+                <button class="op">-</button>
+                <button class="op">/</button>
+                <button class="op">*</button>
+                <button class="operate">=</button>
             </div>
         </div>
     </div>
