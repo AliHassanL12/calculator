@@ -1,32 +1,18 @@
-/*
-Your calculator is going to contain functions for all of the basic math operators you
-typically find on calculators, so start by creating functions for the following items 
-and testing them in your browser’s console.
-
-add
-subtract
-multiply
-divide
-
-*/
-
 function add(a, b) {
-    return a + b;
+    return +a + +b;
 }
 
 function subtract(a, b) {
-    return a - b;
+    return +a - +b;
 }
 
 function multiply(a, b) {
-    return a * b;
+    return +a * +b;
 }
 
 function divide(a, b) {
-    return a / b;
+    return +a / +b;
 }
-
-let num1, num2, operator;
 
 function operate(operator, num1, num2) {
     switch (operator) {
@@ -41,21 +27,39 @@ function operate(operator, num1, num2) {
     }
 }
 
-const buttons = document.querySelectorAll('.num');
-let displayVal = 0;
-let firstNum, secondNum;
-
-function populateDisplay(event) {
-    const display = document.querySelector('.display');
-    const btnValue = event.target.textContent;
-    if (display.textContent == 0) display.textContent = btnValue;
-    else {
-        display.textContent += btnValue;
-        displayVal = display.textContent;
-    } 
+function updateDisplay(event) {
+    const targetBtnContent = event.target.textContent;
+    if (numbersDisplay.textContent == 0 || isNum1Set === true) {
+        isNum1Set = false;
+        return numbersDisplay.textContent = targetBtnContent;
+    }
+    numbersDisplay.textContent += targetBtnContent;
 }
 
-const numberSection = document.querySelectorAll('.numberSection');
-numberSection.forEach((div) => {
-    div.addEventListener('click', populateDisplay)
+function setCurrentOperator(event) {
+    const opBtn = event.target.textContent;
+    if (isOperatorSet === false) num1 = numbersDisplay.textContent;
+    else {
+        num2 = numbersDisplay.textContent;
+        numbersDisplay.textContent = operate(operator, num1, num2);
+        num1 = numbersDisplay.textContent;
+    }
+    operator = opBtn;
+    isNum1Set = true;
+    isOperatorSet = true;
+}
+
+const numbersDisplay = document.querySelector('.display');
+const numBtnNodeList = document.querySelectorAll('.numberSection');
+const operatorBtns = document.querySelectorAll('.op');
+let operator, num1, num2, displayValue;
+let isOperatorSet = false; 
+let isNum1Set = false;
+
+numBtnNodeList.forEach( (numBtn) => {
+    numBtn.addEventListener('click', updateDisplay);
+})
+
+operatorBtns.forEach( (opBtn) => {
+    opBtn.addEventListener('click', setCurrentOperator)
 })
