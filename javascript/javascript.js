@@ -27,81 +27,61 @@ function operate(operator, num1, num2) {
     }
 }
 
-/*
-We are going to create a updateDisplay function that updates the display of the calculator when a number is clicked
-
-*/
-
 function domLogic() {
-
-    function updateDisplay(event) {
-        const calcDisplay = document.querySelector('.display');
-        numClicked = event.target.textContent;
-        if (needBoardReset) {
-            calcDisplay.textContent = numClicked;
-            calcDisplayValue = calcDisplay.textContent;
-            needBoardReset = false;
-        }
-        else if (calcDisplay.textContent == 0) {
-            calcDisplay.textContent = numClicked;
-            calcDisplayValue = calcDisplay.textContent;
-        } 
-        else {
-            calcDisplay.textContent += numClicked;
-            calcDisplayValue = calcDisplay.textContent;
-        }
+    function populateDisplay(event) {
+        btnCliked = event.target;
+        displayValueHolder += btnCliked.textContent
+        display.textContent = displayValueHolder;
     }
-    
+
     function setOperator() {
-        if (isOperatorSet) return -1;
-        operator = this.textContent;
-        isOperatorSet = true;
+        if (!isOperatorSet) {
+            operator = this.textContent;
+            isOperatorSet = true;
+        }
+        else if (isFirstOperandSet && isOperatorSet) {
+            calculateResult();
+            operator = this.textContent;
+            isOperatorSet = true;
+        }
     }
 
     function setFirstOperand() {
-        firstOperand = calcDisplayValue;
-        isFirstOperandSet = true;
-        needBoardReset = true;
+        if (!isFirstOperandSet) {
+            firstOperand = displayValueHolder;
+            displayValueHolder = '';
+            isFirstOperandSet = true;
+        }
     }
 
-    function setSecondOperand() {
-        secondOperand = calcDisplayValue;
-        isSecondOperandSet = true;
+    function calculateResult() {
+        if (isFirstOperandSet && isOperatorSet) {
+            secondOperand = displayValueHolder;
+            const result = operate(operator, firstOperand, secondOperand);
+            displayValueHolder = result;
+            display.textContent = result;
+            isFirstOperandSet = false
+            isOperatorSet = false;
+        }
     }
 
-    function checkForOperation() {
-        if (isFirstOperandSet && isOperatorSet && isSecondOperandSet) calculateOperation();
-        else if (isFirstOperandSet) setSecondOperand();
-    }
+    const display = document.querySelector('.display');
+    const numberButtonsContainer = document.querySelector('.numbers');
+    numberButtonsContainer.addEventListener('click', populateDisplay);
 
-    function calculateOperation() {
-        const operationResult = operate(operator, firstOperand, secondOperand);
-        firstOperand = operationResult;
-        isOperatorSet = false;
-        setOperator();
-        isSecondOperandSet = false;
-        displayResult();
-    }
-
-    function displayResult() {
-        const calcDisplay = document.querySelector('.display');
-        calcDisplay.textContent = firstOperand;
-    }
-    let calcDisplayValue, operator, firstOperand, secondOperand; 
-    let needBoardReset = false;
+    let displayValueHolder = '';
+    let operator, firstOperand, secondOperand;
     let isFirstOperandSet = false;
     let isOperatorSet = false;
-    let isSecondOperandSet = false;
-    
-    const numButtonsContainer = document.querySelector('.numbers');
-    numButtonsContainer.addEventListener('click', updateDisplay);
 
     const operatorButtons = document.querySelectorAll('.operator');
     operatorButtons.forEach((button) => {
         button.addEventListener('click', setOperator);
-        button.addEventListener('click', setFirstOperand);
-        button.addEventListener('click', checkForOperation);
+        button.addEventListener('click', setFirstOperand);   
     })
+
+    const equalButton = document.querySelector('.equalBtn');
+    equalButton.addEventListener('click', calculateResult)
 }
 
 domLogic();
