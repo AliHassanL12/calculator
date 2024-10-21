@@ -27,39 +27,81 @@ function operate(operator, num1, num2) {
     }
 }
 
-function updateDisplay(event) {
-    const targetBtnContent = event.target.textContent;
-    if (numbersDisplay.textContent == 0 || isNum1Set === true) {
-        isNum1Set = false;
-        return numbersDisplay.textContent = targetBtnContent;
+/*
+We are going to create a updateDisplay function that updates the display of the calculator when a number is clicked
+
+*/
+
+function domLogic() {
+
+    function updateDisplay(event) {
+        const calcDisplay = document.querySelector('.display');
+        numClicked = event.target.textContent;
+        if (needBoardReset) {
+            calcDisplay.textContent = numClicked;
+            calcDisplayValue = calcDisplay.textContent;
+            needBoardReset = false;
+        }
+        else if (calcDisplay.textContent == 0) {
+            calcDisplay.textContent = numClicked;
+            calcDisplayValue = calcDisplay.textContent;
+        } 
+        else {
+            calcDisplay.textContent += numClicked;
+            calcDisplayValue = calcDisplay.textContent;
+        }
     }
-    numbersDisplay.textContent += targetBtnContent;
+    
+    function setOperator() {
+        if (isOperatorSet) return -1;
+        operator = this.textContent;
+        isOperatorSet = true;
+    }
+
+    function setFirstOperand() {
+        firstOperand = calcDisplayValue;
+        isFirstOperandSet = true;
+        needBoardReset = true;
+    }
+
+    function setSecondOperand() {
+        secondOperand = calcDisplayValue;
+        isSecondOperandSet = true;
+    }
+
+    function checkForOperation() {
+        if (isFirstOperandSet && isOperatorSet && isSecondOperandSet) calculateOperation();
+        else if (isFirstOperandSet) setSecondOperand();
+    }
+
+    function calculateOperation() {
+        const operationResult = operate(operator, firstOperand, secondOperand);
+        firstOperand = operationResult;
+        isOperatorSet = false;
+        setOperator();
+        isSecondOperandSet = false;
+        displayResult();
+    }
+
+    function displayResult() {
+        const calcDisplay = document.querySelector('.display');
+        calcDisplay.textContent = firstOperand;
+    }
+    let calcDisplayValue, operator, firstOperand, secondOperand; 
+    let needBoardReset = false;
+    let isFirstOperandSet = false;
+    let isOperatorSet = false;
+    let isSecondOperandSet = false;
+    
+    const numButtonsContainer = document.querySelector('.numbers');
+    numButtonsContainer.addEventListener('click', updateDisplay);
+
+    const operatorButtons = document.querySelectorAll('.operator');
+    operatorButtons.forEach((button) => {
+        button.addEventListener('click', setOperator);
+        button.addEventListener('click', setFirstOperand);
+        button.addEventListener('click', checkForOperation);
+    })
 }
 
-function setCurrentOperator(event) {
-    const opBtn = event.target.textContent;
-    if (isOperatorSet === false) num1 = numbersDisplay.textContent;
-    else {
-        num2 = numbersDisplay.textContent;
-        numbersDisplay.textContent = operate(operator, num1, num2);
-        num1 = numbersDisplay.textContent;
-    }
-    operator = opBtn;
-    isNum1Set = true;
-    isOperatorSet = true;
-}
-
-const numbersDisplay = document.querySelector('.display');
-const numBtnNodeList = document.querySelectorAll('.numberSection');
-const operatorBtns = document.querySelectorAll('.op');
-let operator, num1, num2, displayValue;
-let isOperatorSet = false; 
-let isNum1Set = false;
-
-numBtnNodeList.forEach( (numBtn) => {
-    numBtn.addEventListener('click', updateDisplay);
-})
-
-operatorBtns.forEach( (opBtn) => {
-    opBtn.addEventListener('click', setCurrentOperator)
-})
+domLogic();
