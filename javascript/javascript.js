@@ -39,7 +39,7 @@ function domLogic() {
             operator = this.textContent;
             isOperatorSet = true;
         }
-        else if (isFirstOperandSet && isOperatorSet) {
+        else if (isFirstOperandSet && displayValueHolder !== '') {
             calculateResult();
             operator = this.textContent;
             isOperatorSet = true;
@@ -57,12 +57,25 @@ function domLogic() {
     function calculateResult() {
         if (isFirstOperandSet && isOperatorSet) {
             secondOperand = displayValueHolder;
-            const result = operate(operator, firstOperand, secondOperand);
+            if (firstOperand == 0 || secondOperand == 0) {
+                return display.textContent = "Can\'t divide by 0!";
+            }
+            const result = operate(operator, firstOperand, secondOperand).toFixed(2);
             displayValueHolder = result;
             display.textContent = result;
             isFirstOperandSet = false
             isOperatorSet = false;
         }
+    }
+
+    function resetCalculator() {
+        display.textContent = 0
+        displayValueHolder = '';
+        operator = null;
+        firstOperand = null;
+        secondOperand = null;
+        isFirstOperandSet = false;
+        isOperatorSet = false;
     }
 
     const display = document.querySelector('.display');
@@ -81,7 +94,10 @@ function domLogic() {
     })
 
     const equalButton = document.querySelector('.equalBtn');
-    equalButton.addEventListener('click', calculateResult)
+    equalButton.addEventListener('click', calculateResult);
+
+    const clearButton = document.querySelector('.clearButton');
+    clearButton.addEventListener('click', resetCalculator);
 }
 
 domLogic();
